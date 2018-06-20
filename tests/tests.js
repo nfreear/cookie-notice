@@ -7,6 +7,33 @@ function clearCookies() {
     });
 }
 
+// http://qunitjs.com/cookbook/#custom-assertions
+QUnit.assert.contains = function( haystack, needle, message ) {
+  var actual = haystack.indexOf(needle) > -1;
+  this.pushResult({ result: actual, actual: actual, expected: needle, message: message });
+  // Was: this.push(actual, actual, needle, message);
+};
+
+QUnit.assert.matches = function( haystack, regExp, message ) {
+  var result = regExp.test( haystack );
+  this.pushResult({ result: result, actual: result, expected: regExp, message: message });
+};
+
+// Not used! https://gist.github.com/chrisjhoughton/5554466
+/* var contains = function (list, value) {
+  if (list instanceof Array) {
+    var i = list.length;
+    while (i--) {
+      if (list[i] === value) {
+        return true;
+      }
+    }
+    return false;
+  } else if (typeof list === "string") {
+    return (list.indexOf(value) !== -1);
+  }
+}; */
+
 if (window._phantom) {
     if (!HTMLElement.prototype.click) {
         HTMLElement.prototype.click = function () {
@@ -56,7 +83,7 @@ $(document).ready(function () {
         assert.strictEqual($('#cookieNotice').find('a.confirm').length, 1, 'Notice button is present');
     });
 
-    QUnit.test('Check that notice disappear when clicking on the Ok button', function (assert) {
+    QUnit.test('Check that notice disappears when clicking on the OK button', function (assert) {
 
         assert.expect(2);
 
@@ -86,27 +113,29 @@ $(document).ready(function () {
         cookieNoticeJS.clearInstance();
         new cookieNoticeJS();
         assert.strictEqual($('#cookieNotice').length, 1, 'Notice should be present');
-
     });
 
     QUnit.test('And there is no "learn more" link in default configuration case', function (assert) {
-
 
         clearCookies();
         cookieNoticeJS.clearInstance();
         new cookieNoticeJS();
         assert.strictEqual($('a.learn-more').length, 0, 'Learn more link shouldn\'t be present');
-
     });
 
-    QUnit.test('And cookie-notice is sticked to bottom', function (assert) {
+    QUnit.test('And cookie-notice is stuck to the bottom', function (assert) {
         clearCookies();
         cookieNoticeJS.clearInstance();
         new cookieNoticeJS();
-        assert.strictEqual($('#cookieNotice').css('bottom'), '0px', 'positioning is sticked to bottom');
+        // console.log('className?', $('#cookieNotice'));
+
+        assert.contains($('#cookieNotice')[0].className, 'bottom', 'the className contains "bottom"');
+        assert.matches($('#cookieNotice').attr('class'), / bottom/, 'the className contains "bottom" (2)' );
+        // assert.strictEqual(contains($('#cookieNotice')[0].className, 'bottom'), true, 'the className contains "bottom"');
+
+        assert.strictEqual($('#cookieNotice').css('bottom'), '0px', 'positioning is stuck to the bottom');
         assert.strictEqual($('#cookieNotice').css('top'), 'auto', 'so top position is auto');
     });
-
 
     QUnit.test('When defaults have overrides changes should take place', function (assert) {
 
@@ -125,6 +154,6 @@ $(document).ready(function () {
 
         assert.strictEqual(learnMoreLink.length, 1, 'Learn more link should be present');
         assert.strictEqual(learnMoreLink.attr('href'), mockedLink, 'Learn more link href equals mocked link');
-
+        assert.strictEqual(learnMoreLink.attr('target'), '', 'The target of the learn-more link should be empty (default)');
     });
 });
