@@ -29,6 +29,7 @@
     "grunt": "^1.0.2",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-qunit": "^2.0.0",
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-rsids-pa11y": "^0.3.4",

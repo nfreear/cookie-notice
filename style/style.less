@@ -1,0 +1,72 @@
+/**
+ * Cookie Notice LESS stylesheet.
+ */
+
+.cookie-notice-js-body-top {
+  // Calculated: 'padding-top' == 'notice-height'.
+  padding-top: 22px; // Calculated!
+
+  // var lineHeight = 2, // (em) // Was: 28 (px).
+  //    paddingBottomTop = 10,
+  //    fontSize = lineHeight / 2.333,
+  //    noticeHeight = lineHeight + paddingBottomTop * 2;
+}
+
+.cookie-notice-js {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: #000;
+  color: #fff;
+  z-index: 999;
+  padding: 10px 5px;
+  text-align: center;
+  line-height: 2rem;
+  font: .9rem 'Helvetica neue', Helvetica, sans-serif;
+
+  &.bottom {
+    bottom: 0;
+    top: auto;
+  }
+
+  &.top {
+    bottom: auto;
+    top: 0;
+  }
+
+  .learn-more {
+    color: rgb(0, 159, 221);
+    // Was: text-decoration: none;
+    display: inline;
+
+    &:focus,
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  /* .confirm */ [ role = button ] {
+    background: #ca5000; // Was: rgb(211, 84, 0);
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    padding: 4px 15px; // Was: 0 15px;
+    margin: 4px 0 0 10px;
+  }
+
+  // Accessibility: screen readers only.
+  .sr-only {
+    // Was: display: inline-block;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+    width: 1px;
+  }
+
+  a:focus {
+    outline: 2px solid orange;
+    outline-offset: 5px;
+  }
+}

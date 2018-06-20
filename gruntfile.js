@@ -11,6 +11,19 @@ module.exports = function (grunt) {
                 }
             }
         },
+        less: {
+            dist: {
+                options: {
+                    banner:
+                    '/*! <%= pkg.name %> v<%= pkg.version %> by <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %>.\n\n*/\n',
+                    compress: true
+                    // paths: [ 'assets/css' ]
+                },
+                files: {
+                    'dist/cookie.notice.css': 'style/style.less'
+                }
+            }
+        },
         qunit: {
             all: {
                 options: {
@@ -55,6 +68,7 @@ module.exports = function (grunt) {
     });
 
     // Load the plugins
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-qunit');
@@ -62,7 +76,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-rsids-pa11y');
 
     // Default task(s).
-    grunt.registerTask('default', [ 'test', 'strip_code', 'uglify' ]);
+    grunt.registerTask('default', [ 'test', 'strip_code', 'uglify', 'less' ]);
     grunt.registerTask('test', [ 'connect', 'qunit', 'rsids_pa11y' ]);
 
 };

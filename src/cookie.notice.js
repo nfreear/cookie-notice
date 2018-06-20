@@ -42,11 +42,17 @@
         },
 
         'expiresIn': 30,
+
+        /* DEPRECATED. No longer needed! */
         'buttonBgColor': '#ca5000', // Accessibility contrast fix (Was: '#d35400') (WCAG2AAA: '#983c00').
         'buttonTextColor': '#fff',
         'noticeBgColor': '#000',
         'noticeTextColor': '#fff',
         'linkColor': '#009fdd',
+        /* END DEPRECATED. */
+
+        'styleLinkHref': '/../../dist/cookie.notice.css',
+
         'linkTarget': '', // Accessibility fix (Was: '_blank').
         'debug': false
     };
@@ -96,6 +102,8 @@
         if (params.debug) {
             console.warn('cookie-notice:', params);
         }
+
+        addStylesheetLink(params.styleLinkHref);
 
         // Get current locale for notice text
         var noticeText = getStringForCurrentLocale(params.messageLocales);
@@ -164,34 +172,38 @@
      */
     function createNotice(message, bgColor, textColor, position) {
 
-        var notice = document.createElement('div'),
-            noticeStyle = notice.style,
-            lineHeight = 2, // Was: 28 (px).
+        var notice = document.createElement('div');
+        // var noticeStyle = notice.style,
+        /* var lineHeight = 2, // Was: 28 (px).
             paddingBottomTop = 10,
             fontSize = lineHeight / 2.333,
-            noticeHeight = lineHeight + paddingBottomTop * 2;
+            noticeHeight = lineHeight + paddingBottomTop * 2; */
 
         notice.innerHTML = message + '&nbsp;';
         notice.setAttribute('id', 'cookieNotice');
         notice.setAttribute('data-test-section', 'cookie-notice');
         notice.setAttribute('data-test-transitioning', 'false');
 
+        notice.className = 'cookie-notice-js ';
 
-        noticeStyle.position = 'fixed';
+        notice.className += (position === 'top') ? 'top' : 'bottom';
+
+        // noticeStyle.position = 'fixed';
 
         if (position === 'top') {
             var bodyDOMElement = document.querySelector('body');
 
+            bodyDOMElement.className += ' cookie-notice-js-body-top';
+
             originPaddingTop = bodyDOMElement.style.paddingTop;
 
-            noticeStyle.top = '0';
-            bodyDOMElement.style.paddingTop = noticeHeight + 'px';
-        } else {
+            // noticeStyle.top = '0';
+            // bodyDOMElement.style.paddingTop = noticeHeight + 'px';
+        } /* else {
             noticeStyle.bottom = '0';
-        }
+        } */
 
-
-        noticeStyle.left = '0';
+        /* noticeStyle.left = '0';
         noticeStyle.right = '0';
         noticeStyle.background = bgColor;
         noticeStyle.color = textColor;
@@ -201,7 +213,7 @@
         noticeStyle["font-size"] = fontSize + 'rem'; // Was: 'px'.
         noticeStyle["line-height"] = lineHeight + 'rem'; // Was: 'px'.
         noticeStyle.fontFamily = 'Helvetica neue, Helvetica, sans-serif';
-
+        */
 
         return notice;
     }
@@ -215,8 +227,8 @@
      */
     function createDismissButton(message, buttonColor, buttonTextColor) {
 
-        var dismissButton = document.createElement('a'),
-            dismissButtonStyle = dismissButton.style;
+        var dismissButton = document.createElement('a');
+        // var dismissButtonStyle = dismissButton.style;
 
         // Dismiss button
         dismissButton.href = '#';
@@ -227,7 +239,7 @@
 
         dismissButton.setAttribute('data-test-action', 'dismiss-cookie-notice');
 
-
+        /*
         // Dismiss button style
         dismissButtonStyle.background = buttonColor;
         dismissButtonStyle.color = buttonTextColor;
@@ -235,9 +247,9 @@
         dismissButtonStyle.display = 'inline-block';
         dismissButtonStyle.padding = '0 15px';
         dismissButtonStyle.margin = '0 0 0 10px';
+        */
 
         return dismissButton;
-
     }
 
     /**
@@ -259,12 +271,13 @@
         learnMoreLink.className = 'learn-more';
         learnMoreLink.setAttribute('data-test-action', 'learn-more-link');
 
+        /*
         learnMoreLinkStyle.color = linkColor;
         learnMoreLinkStyle['text-decoration'] = 'underline'; // Accessibility fix (Was: 'none').
         learnMoreLinkStyle.display = 'inline';
+        */
 
         return learnMoreLink;
-
     }
 
     /**
@@ -321,6 +334,21 @@
             }
         }
         return source;
+    }
+
+    function addStylesheetLink(styleUrl) {
+        if (!styleUrl) return;
+
+        // Assume the Javascript and stylesheet are on a different domain to the page (e.g. CDN).
+        var styleLink = document.createElement('link');
+        var script = document.querySelector('script[ src *= "cookie.notice." ]');
+        var href = (script ? script.src : '') + styleUrl;
+
+        styleLink.rel = 'stylesheet';
+        styleLink.type = 'text/css';
+        styleLink.href = href;
+
+        document.head.appendChild(styleLink);
     }
 
     /* test-code */
