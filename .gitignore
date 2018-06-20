@@ -1,2 +1,18 @@
+
+*.css
+
 node_modules
 .idea
+*diff*
+*BAK*
+
+test2.html
+.gitlab-ci.yml
+/res
+
+_pa11y-screen-capture.png
+
+*.tgz
+/package
+
+# End.

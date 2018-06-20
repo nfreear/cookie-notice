@@ -9,8 +9,8 @@
     /**
      * Store current instance
      */
-    var instance,
-        originPaddingTop;
+    var instance;
+    // originPaddingTop;
 
     /**
      * Defaults values
@@ -43,15 +43,16 @@
 
         'expiresIn': 30,
 
-        /* DEPRECATED. No longer needed! */
+        /* DEPRECATED. No longer needed!
         'buttonBgColor': '#ca5000', // Accessibility contrast fix (Was: '#d35400') (WCAG2AAA: '#983c00').
         'buttonTextColor': '#fff',
         'noticeBgColor': '#000',
         'noticeTextColor': '#fff',
         'linkColor': '#009fdd',
-        /* END DEPRECATED. */
+        END DEPRECATED. */
 
         'styleLinkHref': '/../../dist/cookie.notice.css',
+        'scriptSelector': 'script[ src *= "cookie.notice." ]',
 
         'linkTarget': '', // Accessibility fix (Was: '_blank').
         'debug': false
@@ -103,27 +104,27 @@
             console.warn('cookie-notice:', params);
         }
 
-        addStylesheetLink(params.styleLinkHref);
+        addStylesheetLink(params.styleLinkHref, params.scriptSelector);
 
         // Get current locale for notice text
         var noticeText = getStringForCurrentLocale(params.messageLocales);
 
         // Create notice
-        var notice = createNotice(noticeText, params.noticeBgColor, params.noticeTextColor, params.cookieNoticePosition);
+        var notice = createNotice(noticeText, params.cookieNoticePosition);
 
         var learnMoreLink;
 
         if (params.learnMoreLinkEnabled) {
             var learnMoreLinkText = getStringForCurrentLocale(params.learnMoreLinkText);
 
-            learnMoreLink = createLearnMoreLink(learnMoreLinkText, params.learnMoreLinkHref, params.linkTarget, params.linkColor);
+            learnMoreLink = createLearnMoreLink(learnMoreLinkText, params.learnMoreLinkHref, params.linkTarget);
         }
 
         // Get current locale for button text
         var buttonText = getStringForCurrentLocale(params.buttonLocales);
 
         // Create dismiss button
-        var dismissButton = createDismissButton(buttonText, params.buttonBgColor, params.buttonTextColor);
+        var dismissButton = createDismissButton(buttonText);
 
         // Dismiss button click event
         dismissButton.addEventListener('click', function (e) {
@@ -140,7 +141,6 @@
         }
 
         noticeDomElement.appendChild(dismissButton);
-
     };
 
     /**
@@ -165,15 +165,12 @@
     /**
      * Create notice
      * @param message
-     * @param bgColor
-     * @param textColor
      * @param position
      * @returns {HTMLElement}
      */
-    function createNotice(message, bgColor, textColor, position) {
+    function createNotice(message, position) {
 
         var notice = document.createElement('div');
-        // var noticeStyle = notice.style,
         /* var lineHeight = 2, // Was: 28 (px).
             paddingBottomTop = 10,
             fontSize = lineHeight / 2.333,
@@ -188,32 +185,13 @@
 
         notice.className += (position === 'top') ? 'top' : 'bottom';
 
-        // noticeStyle.position = 'fixed';
-
         if (position === 'top') {
             var bodyDOMElement = document.querySelector('body');
 
             bodyDOMElement.className += ' cookie-notice-js-body-top';
 
-            originPaddingTop = bodyDOMElement.style.paddingTop;
-
-            // noticeStyle.top = '0';
-            // bodyDOMElement.style.paddingTop = noticeHeight + 'px';
-        } /* else {
-            noticeStyle.bottom = '0';
-        } */
-
-        /* noticeStyle.left = '0';
-        noticeStyle.right = '0';
-        noticeStyle.background = bgColor;
-        noticeStyle.color = textColor;
-        noticeStyle["z-index"] = '999';
-        noticeStyle.padding = paddingBottomTop + 'px 5px';
-        noticeStyle["text-align"] = 'center';
-        noticeStyle["font-size"] = fontSize + 'rem'; // Was: 'px'.
-        noticeStyle["line-height"] = lineHeight + 'rem'; // Was: 'px'.
-        noticeStyle.fontFamily = 'Helvetica neue, Helvetica, sans-serif';
-        */
+            // originPaddingTop = bodyDOMElement.style.paddingTop;
+        }
 
         return notice;
     }
@@ -221,14 +199,11 @@
     /**
      * Create dismiss button
      * @param message
-     * @param buttonColor
-     * @param buttonTextColor
      * @returns {HTMLElement}
      */
-    function createDismissButton(message, buttonColor, buttonTextColor) {
+    function createDismissButton(message) {
 
         var dismissButton = document.createElement('a');
-        // var dismissButtonStyle = dismissButton.style;
 
         // Dismiss button
         dismissButton.href = '#';
@@ -239,43 +214,26 @@
 
         dismissButton.setAttribute('data-test-action', 'dismiss-cookie-notice');
 
-        /*
-        // Dismiss button style
-        dismissButtonStyle.background = buttonColor;
-        dismissButtonStyle.color = buttonTextColor;
-        dismissButtonStyle['text-decoration'] = 'none';
-        dismissButtonStyle.display = 'inline-block';
-        dismissButtonStyle.padding = '0 15px';
-        dismissButtonStyle.margin = '0 0 0 10px';
-        */
-
         return dismissButton;
     }
 
     /**
-     * Create the learn more link
+     * Create the 'learn more' link
      *
      * @param learnMoreLinkText
      * @param learnMoreLinkHref
-     * @param linkColor
+     * @param linkTarget
      * @returns {HTMLElement}
      */
-    function createLearnMoreLink(learnMoreLinkText, learnMoreLinkHref, linkTarget, linkColor) {
+    function createLearnMoreLink(learnMoreLinkText, learnMoreLinkHref, linkTarget) {
 
-        var learnMoreLink = document.createElement('a'),
-            learnMoreLinkStyle = learnMoreLink.style;
+        var learnMoreLink = document.createElement('a');
 
         learnMoreLink.href = learnMoreLinkHref;
         learnMoreLink.textContent = learnMoreLinkText;
         learnMoreLink.target = linkTarget;
         learnMoreLink.className = 'learn-more';
         learnMoreLink.setAttribute('data-test-action', 'learn-more-link');
-
-        /*
-        learnMoreLinkStyle.color = linkColor;
-        learnMoreLinkStyle['text-decoration'] = 'underline'; // Accessibility fix (Was: 'none').
-        learnMoreLinkStyle.display = 'inline';
-        */
 
         return learnMoreLink;
     }
@@ -304,10 +262,10 @@
         (function fade() {
             if ((element.style.opacity -= .1) < 0.01) {
 
-                if (originPaddingTop !== undefined) {
+                /* if (originPaddingTop !== undefined) {
                     var bodyDOMElement = document.querySelector('body');
                     bodyDOMElement.style.paddingTop = originPaddingTop;
-                }
+                } */
 
                 document.body.removeChild(element);
             } else {
@@ -336,12 +294,17 @@
         return source;
     }
 
-    function addStylesheetLink(styleUrl) {
+    /**
+     * Method to add a stylesheet <link> to the page.
+     * @param styleUrl
+     * @param scriptSelector
+     */
+    function addStylesheetLink(styleUrl, scriptSelector) {
         if (!styleUrl) return;
 
         // Assume the Javascript and stylesheet are on a different domain to the page (e.g. CDN).
         var styleLink = document.createElement('link');
-        var script = document.querySelector('script[ src *= "cookie.notice." ]');
+        var script = document.querySelector(scriptSelector);
         var href = (script ? script.src : '') + styleUrl;
 
         styleLink.rel = 'stylesheet';

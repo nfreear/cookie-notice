@@ -19,21 +19,6 @@ QUnit.assert.matches = function( haystack, regExp, message ) {
   this.pushResult({ result: result, actual: result, expected: regExp, message: message });
 };
 
-// Not used! https://gist.github.com/chrisjhoughton/5554466
-/* var contains = function (list, value) {
-  if (list instanceof Array) {
-    var i = list.length;
-    while (i--) {
-      if (list[i] === value) {
-        return true;
-      }
-    }
-    return false;
-  } else if (typeof list === "string") {
-    return (list.indexOf(value) !== -1);
-  }
-}; */
-
 if (window._phantom) {
     if (!HTMLElement.prototype.click) {
         HTMLElement.prototype.click = function () {
@@ -81,6 +66,7 @@ $(document).ready(function () {
     QUnit.test('Check if the notice is present', function (assert) {
         assert.strictEqual($('#cookieNotice').length, 1, 'Notice is present');
         assert.strictEqual($('#cookieNotice').find('a.confirm').length, 1, 'Notice button is present');
+        assert.contains($('#cookieNotice')[0].className, 'cookie-notice-js', 'the className contains "cookie-notice-js"');
     });
 
     QUnit.test('Check that notice disappears when clicking on the OK button', function (assert) {
@@ -127,14 +113,11 @@ $(document).ready(function () {
         clearCookies();
         cookieNoticeJS.clearInstance();
         new cookieNoticeJS();
-        // console.log('className?', $('#cookieNotice'));
 
-        assert.contains($('#cookieNotice')[0].className, 'bottom', 'the className contains "bottom"');
-        assert.matches($('#cookieNotice').attr('class'), / bottom/, 'the className contains "bottom" (2)' );
-        // assert.strictEqual(contains($('#cookieNotice')[0].className, 'bottom'), true, 'the className contains "bottom"');
+        assert.matches($('#cookieNotice').attr('class'), / bottom/, 'the className contains "bottom"' );
 
         assert.strictEqual($('#cookieNotice').css('bottom'), '0px', 'positioning is stuck to the bottom');
-        assert.strictEqual($('#cookieNotice').css('top'), 'auto', 'so top position is auto');
+        assert.strictEqual($('#cookieNotice').css('top'), 'auto', 'so the top position is "auto"');
     });
 
     QUnit.test('When defaults have overrides changes should take place', function (assert) {

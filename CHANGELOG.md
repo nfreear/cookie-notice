@@ -5,9 +5,16 @@
 
 Version History
 
+## Version 2.0.0
+
+ * _Date:  approx. June 2018_;
+ * Move CSS from `style` attributes to `<style>` or `<link rel=stylesheet ... >`, Issue [#8][];
+ * The following configuration options are __removed__ in this version:
+   `buttonBgColor`, `buttonTextColor`, `noticeBgColor`, `noticeTextColor`, `linkColor`.
+
 ## Version 1.1.12
 
- * _Date:  approx. 4-6 June 2018_;
+ * _Date:  approx. 4-30 June 2018_;
  * Add accessibility testing via [grunt-rsids-pa11y][] and [pa11y][], WCAG 2.0 AA, pull #6;
  * Accessibility fixes — colour contrast, button role, link target, link underline;
  * Accessibility fixes — express CSS font-size in `em` or `rem`, not `px`;
@@ -22,7 +29,7 @@ Version History
 ## Version 1.1.11
 
  * _Date:  30 May 2018_;
- * Add support for `data-cookie-notice` attribute on `<script>`, pull #5, issue [#4][];
+ * Add support for `data-cookie-notice` attribute on `<script>`, pull #5, Issue [#4][];
  * Document `data-` attribute in README;
  * Document _unpkg_ CDN in README;
 
@@ -69,6 +76,9 @@ Version History
 [npm]: https://www.npmjs.com/package/cookie-notice
 [@micc83]: https://github.com/micc83/cookie-notice-js "Alessandro Benoit"
 [#4]: https://github.com/AOEpeople/cookie-notice/issues/4
+    "'data-cookie-notice' HTML attribute, other suggestions / wishlist"
+[#8]: https://github.com/AOEpeople/cookie-notice/issues/8
+    "Move styles to separate stylesheet, included via Javascript"
 [a11y-fail]: https://travis-ci.org/nfreear/cookie-notice/jobs/387344672#L1217-L1235
 [grunt-rsids-pa11y]: https://www.npmjs.com/package/grunt-rsids-pa11y
 [pa11y]: http://pa11y.org/

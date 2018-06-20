@@ -86,20 +86,15 @@ For the most of you including the script should be enough but **CookieNoticeJS**
        // The message will be shown again in X days
        'expiresIn': 30,
 
-       // Dismiss button background color
-       'buttonBgColor': '#d35400',  
-
-       // Dismiss button text color
+       // DEPRECATED.
+       'buttonBgColor': '#d35400',
        'buttonTextColor': '#fff',
-
-       // Notice background color
        'noticeBgColor': '#000',
-
-       // Notice text color
        'noticeTextColor': '#fff',
-
-       // the learnMoreLink color (default='#009fdd')
        'linkColor': '#f00',
+       // END DEPRECATED.
+
+       'styleLinkHref': '../cookie-notice.css',
 
        // The target of the learn more link (default='', or '_blank')
        'linkTarget': '',
@@ -109,6 +104,12 @@ For the most of you including the script should be enough but **CookieNoticeJS**
     });
 </script>
 ```
+
+### Deprecated properties
+
+In `cookie-notice` >= Version 2.x the color options shown above will be removed
+(`buttonBgColor`, `buttonTextColor`, `noticeBgColor`, `noticeTextColor`, `linkColor`).
+Instead, developers and designers can override these properties using the CSS styles for the page.
 
 ## Configuration via `data-` attribute
 
